@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaScriptLibraryMappings">
+    <includedPredefinedLibrary name="ECMAScript 6" />
+    <excludedPredefinedLibrary name="Node知识体系/0——Process/node_modules" />
+    <excludedPredefinedLibrary name="Node知识体系/4——HTTPS/HTTPS/forge/node_modules" />
+    <excludedPredefinedLibrary name="Node知识体系/7——stream/node_modules" />
+    <excludedPredefinedLibrary name="Node知识体系/node-master/deps/npm/node_modules" />
+    <excludedPredefinedLibrary name="Node知识体系/node-master/tools/doc/node_modules" />
+    <excludedPredefinedLibrary name="Node知识体系/node-master/tools/eslint/node_modules" />
+  </component>
+</project>
