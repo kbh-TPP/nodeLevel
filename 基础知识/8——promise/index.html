@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>promise</title>
+</head>
+
+<body>
+
+
+<script type="text/javascript">
+
+    function loadImageAsync(url) {
+    	console.log("loadImageAsync start");
+
+        return new Promise(function(resolve, reject) {
+            var image = new Image();
+
+            image.onload = function() {
+
+    			console.log("loadImageAsync end");
+
+                resolve(image);
+            };
+
+            image.onerror = function() {
+                reject(new Error('Could not load image at ' + url));
+            };
+
+            image.src = url;
+        });
+    }
+
+    var urlPath = "https://www.baidu.com/img/bd_logo1.png"
+    loadImageAsync(urlPath).then(data => {
+
+    	console.log('sucess', data);
+
+    }, error => {
+    	console.log("error", error)
+    });
+
+</script>
+</body>
+
+</html>
