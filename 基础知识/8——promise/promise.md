@@ -592,12 +592,6 @@ p2.then(result => console.log(result))
 
 
 
-
-
-
-
-
-
 ## 参考
     http://liubin.org/promises-book/#chapter2-how-to-write-promise
     http://es6.ruanyifeng.com/#docs/promise#Promise-的含义
