@@ -502,8 +502,35 @@
 ```
 
 
+### 4 杂谈
 
+```js
 
+	var express = require('express');
+	var app = express();
+
+	app.get('/', function (req, res) {
+	  res.send('Hello world!');
+	});
+	app.get('/ntc', function(req, res, next){
+
+		console.log(" middle ware ");
+		next();
+	}, function(req, res) {
+
+		console.log(" end ");
+		res.json({
+			status : 1
+		});
+	});
+
+	app.listen(3000);
+
+```
+	输出： 
+		middle ware 
+		end 
+	这样，方法就可以作为中间件来使用
 
 
 

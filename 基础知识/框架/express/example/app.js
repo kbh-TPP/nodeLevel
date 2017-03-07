@@ -18,8 +18,14 @@
 // app.get('/', function (req, res) {
 //   res.send('Hello world!');
 // });
-// app.get('/customer', function(req, res){
-//   res.send('customer page');
+// app.get('/customer', function(req, res, next){
+//   // res.send('customer page');
+//   console.log(req.url);
+//   next();
+// }, function(req, res) {
+// 	res.json({
+// 		status : 1
+// 	});
 // });
 // app.get('/admin', function(req, res){
 //   res.send('admin page');
@@ -149,34 +155,52 @@ process.on('uncaughtException', function (err) {
 // http.createServer(app).listen(1337);
 
 
-var express = require("express");
-var app = express();
+// var express = require("express");
+// var app = express();
 
 
-app.get("/download", function(request, response) {
-	response.sendFile( __dirname + "/compressed.tracemonkey-pldi-09.pdf");
-});
+// app.get("/download", function(request, response) {
+// 	response.sendFile( __dirname + "/compressed.tracemonkey-pldi-09.pdf");
+// });
 
-var uploading = multer({
-	dest: __dirname + '../public/uploads/',
-	// 设定限制，每次最多上传1个文件，文件大小不超过1MB
-	limits: {fileSize: 1000000, files:1},
-})
+// var uploading = multer({
+// 	dest: __dirname + '../public/uploads/',
+// 	// 设定限制，每次最多上传1个文件，文件大小不超过1MB
+// 	limits: {fileSize: 1000000, files:1},
+// })
 
-app.post('/upload', uploading, function(req, res) {
+// app.post('/upload', uploading, function(req, res) {
 	
-})
+// })
 
 
-http.createServer(app).listen(1337);
-
-
-
+// http.createServer(app).listen(1337);
 
 
 
 
 
+
+
+	var express = require('express');
+	var app = express();
+
+	app.get('/', function (req, res) {
+	  res.send('Hello world!');
+	});
+	app.get('/ntc', function(req, res, next){
+
+		console.log(" middle ware ");
+		next();
+	}, function(req, res) {
+
+		console.log(" end ");
+		res.json({
+			status : 1
+		});
+	});
+
+	app.listen(3000);
 
 
 
