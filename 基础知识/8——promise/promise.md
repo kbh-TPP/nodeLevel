@@ -21,7 +21,9 @@
     如果某些事件不断地反复发生，一般来说，使用 stream 模式是比部署Promise更好的选择。
 
 ## 基本用法
-    
+  
+### 创建 promise
+
 ```js
     var promise = new Promise(function(resolve, reject) {
       // ... some code
@@ -33,12 +35,21 @@
       }
     });
 ```
-	Promise构造函数接受一个函数作为参数，该函数的两个参数分别是resolve和reject。它们是两个函数，由JavaScript引擎提供，不用自己部署。
+	  Promise构造函数接受一个函数作为参数，该函数的两个参数分别是resolve和reject。它们是两个函数，由JavaScript引擎提供，不用自己部署。
 
     resolve函数的作用是，将Promise对象的状态从“未完成”变为“成功”（即从Pending变为Resolved），在异步操作成功时调用，并将异步操作的结果，作为参数传递出去；reject函数的作用是，将Promise对象的状态从“未完成”变为“失败”（即从Pending变为Rejected），在异步操作失败时调用，并将异步操作报出的错误，作为参数传递出去。
 
     Promise实例生成以后，可以用then方法分别指定Resolved状态和Reject状态的回调函数。
-	
+
+#### 穿件promise 的方法，还可以使用 promise.resolve({});
+    比如 Promise.resolve(42); 可以认为是以下代码的语法糖。
+
+```js
+  new Promise(function(resolve){
+      resolve(42);
+  });
+```
+
 ```js
 
 	promise.then(function(value) {
@@ -62,7 +73,8 @@
 	});
 
 ```
-	上面代码中，timeout方法返回一个Promise实例，表示一段时间以后才会发生的结果。过了指定的时间（ms参数）以后，Promise实例的状态变为Resolved，就会触发then方法绑定的回调函数。
+    
+    上面代码中，timeout方法返回一个Promise实例，表示一段时间以后才会发生的结果。过了指定的时间（ms参数）以后，Promise实例的状态变为Resolved，就会触发then方法绑定的回调函数。
 
 
 ```js
@@ -77,7 +89,6 @@
   //      { '0': 'done', '1': 'error' }
 ```
 
-    上面代码中，timeout方法返回一个Promise实例，表示一段时间以后才会发生的结果。过了指定的时间（ms参数）以后，Promise实例的状态变为Resolved，就会触发then方法绑定的回调函数。
 
 ```js
     
@@ -128,8 +139,6 @@
     上面就是说，p2的函数，将p1返回，
 
 ```js
-
-
     var p1 = new Promise(function (resolve, reject) {
       setTimeout(() => reject(new Error('fail')), 3000)
     })
@@ -214,11 +223,16 @@ p2.then(result => console.log(result))
 
 #### Promise.prototype.then()
     
-    Promise实例具有then方法，也就是说，then方法是定义在原型对象Promise.prototype上的。它的作用是为Promise实例添加状态改变时的回调函数。前面说过，then方法的第一个参数是Resolved状态的回调函数，第二个参数（可选）是Rejected状态的回调函数。
+    Promise实例具有then方法，它是定义在原型对象Promise.prototype上的。它的作用是为Promise实例状态改变时所触发的回调函数。
+    then方法的第一个参数是Resolved状态的回调函数，第二个参数（可选）是Rejected状态的回调函数。
+    then方法返回的是一个新的Promise实例（注意，不是原来那个Promise实例）。可以采用链式写法，因此，then方法后面再调用另一个then方法。
+    这个和jQuery很像，就是每一个then的返回值是一个promise对象，这个时候，调用then的这个对象，
+    通过resolve或者reject传入的参数，对作为这个promise对象的参数，继续执行。
 
-    then方法返回的是一个新的Promise实例（注意，不是原来那个Promise实例）。因此可以采用链式写法，即then方法后面再调用另一个then方法。
+    如果只处理成功，就直接使用 promise.then(onFulfilled);
+    如果只处理失败，就直接使用 promise.then(undefined, onRejected)，这种方式，但是，官方还有一个更推荐的方式，
+    是使用 promise.catch(onRejected)。
 
-    这个和jQuery很像，就是每一个then的返回值是一个promise对象，这个时候，调用then的这个对象，通过resolve或者reject传入的参数，对作为这个promise对象的参数，继续执行。
 
 #### Promise.prototype.catch() 
     
@@ -226,30 +240,34 @@ p2.then(result => console.log(result))
 
 ```js
 
+    function Test() {
+        var promise = new Promise(function(resolve, reject) {
+            try {
+                console.log('promise action');
+                throw new Error('test');
+                resolve("OK");
+
+            } catch (e) {
+                reject(e);
+            }
+        });
+
+        return promise;
+    }
+
     // 写法一
-    var promise = new Promise(function(resolve, reject) {
-      try {
-        throw new Error('test');
-      } catch(e) {
-        reject(e);
-      }
-    });
-    promise.catch(function(error) {
-      console.log(error);
+    Test().catch(function(error) {
+        console.log(error);
     });
 
     // 写法二
-    var promise = new Promise(function(resolve, reject) {
-      reject(new Error('test'));
-    });
-    promise.catch(function(error) {
-      console.log(error);
+    Test().then(undefined, function(error) {
+        console.log(error);
     });
 
 ```
     比较上面两种写法，可以发现reject方法的作用，等同于抛出错误。
-
-    一般来说，不要在then方法里面定义Reject状态的回调函数（即then的第二个参数），总是使用catch方法。
+    一般来说，不要在then方法里面定义Reject状态的回调函数（即then的第二个参数），总是使用catch方法，会是一个比较好的选择。
 
 ```js
 
@@ -388,6 +406,59 @@ p2.then(result => console.log(result))
 
     上面代码中，如果5秒之内fetch方法无法返回结果，变量p的状态就会变为rejected，从而触发catch方法指定的回调函数。
 
+```js
+
+function timerPromisefy(delay) {
+    return new Promise(function (resolve) {
+        setTimeout(function () {
+            resolve(delay);
+        }, delay);
+    });
+}
+// 任何一个promise变为resolve或reject 的话程序就停止运行
+Promise.race([
+    timerPromisefy(1),
+    timerPromisefy(32),
+    timerPromisefy(64),
+    timerPromisefy(128)
+]).then(function (value) {
+    console.log(value);    // => 1
+});
+
+```
+    
+    上面的代码创建了4个promise对象，这些promise对象会分别在1ms，32ms，64ms和128ms后变为确定状态，即FulFilled，并且在第一个变为确定状态的1ms后， .then 注册的回调函数就会被调用，这时候确定状态的promise对象会调用 resolve(1) 因此传递给 value 的值也是1，控制台上会打印出1来。
+
+
+    下面我们再来看看在第一个promise对象变为确定（FulFilled）状态后，它之后的promise对象是否还在继续运行。
+
+```js
+
+var winnerPromise = new Promise(function (resolve) {
+        setTimeout(function () {
+            console.log('this is winner');
+            resolve('this is winner');
+        }, 4);
+    });
+var loserPromise = new Promise(function (resolve) {
+        setTimeout(function () {
+            console.log('this is loser');
+            resolve('this is loser');
+        }, 1000);
+    });
+// 第一个promise变为resolve后程序停止
+Promise.race([winnerPromise, loserPromise]).then(function (value) {
+    console.log(value);    // => 'this is winner'
+});
+
+```
+
+    我们在前面代码的基础上增加了 console.log 用来输出调试信息。
+    执行上面代码的话，我们会看到 winnter和loser promise对象的 setTimeout 方法都会执行完毕， console.log 也会分别输出它们的信息。
+    也就是说， Promise.race 在第一个promise对象变为Fulfilled之后，并不会取消其他promise对象的执行。
+
+
+
 
 #### Promise.resolve() 
 
@@ -432,13 +503,14 @@ p2.then(result => console.log(result))
 ##### （2）参数是一个thenable对象
     
     thenable对象指的是具有then方法的对象，比如下面这个对象。
+    thenable的对象，是具备有转换为一个promise对象能力的。
 
 ```js
 
     let thenable = {
-      then: function(resolve, reject) {
-        resolve(42);
-      }
+        then: function(resolve, reject) {
+          resolve(42);
+        }
     };
 
 ```
@@ -463,6 +535,16 @@ p2.then(result => console.log(result))
     
     首先，thenable 内的 then 方法，然后，P1就变成了 resolved 的状态，从而立刻执行后面的then方法。
 
+```js
+
+    var promise = Promise.resolve($.ajax('/test'));// => promise对象
+    promise.then(function(value){
+       console.log(value);
+    });
+
+    // 这里的  $.ajax 是一个 jquery 封装的ajax 对象。
+
+```
 
 ##### （3）参数不是具有then方法的对象，或根本就不是对象
     
@@ -589,10 +671,199 @@ p2.then(result => console.log(result))
 ```
 
 
+## 特性分析
+    
+### 1 promise 是否是异步执行
+
+```js
+
+var promise = new Promise(function (resolve){
+    console.log("inner promise");   // 1
+    resolve("HGWJ");
+});
+
+promise.then(function(value){
+    console.log(value);             // 3
+});
+
+console.log("outer promise");       // 2
+
+```    
+    输出  
+        inner promise
+        outer promise
+        HGWJ
+
+```js
+
+    Promise.resolve('HGWJ').then(function(data) {
+        console.log(data);
+    })
+
+    setTimeout(function() {
+        console.log('setTimeout');
+    }, 0);
+
+    process.nextTick(function() {
+        console.log('nextTick');
+    });
+
+    console.log('console');
+```
+
+    输出
+        console
+        nextTick
+        HGWJ
+        setTimeout
+
+    如此，可以证明，promise的执行，就是异步回调。在不考虑回调延迟的情况下。
+    比如网络，或者I/O，它的执行顺序是在 nextTick --> Promise 0 --> setTimeout 0
+
+### 2 不要对异步回调函数进行同步调用 中也有详细介绍。
+
+    绝对不能对异步回调函数（即使在数据已经就绪）进行同步调用。
+    如果对异步回调函数进行同步调用的话，处理顺序可能会与预期不符，可能带来意料之外的后果。
+    对异步回调函数进行同步调用，还可能导致栈溢出或异常处理错乱等问题。
+    如果想在将来某时刻调用异步回调函数的话，可以使用 setTimeout 等异步API。
+
+    主要的问题是，执行时机是不确定的，会根据当时的情况而定，因此，就都写成异步即可。
 
 
+### 3 promise chain 【promise的链式操作】
+
+```js
+
+    function taskA() {
+        console.log("Task A");
+        throw new Error("throw Error @ Task A")
+    }
+    function taskB() {
+        console.log("Task B");  // 不会被调用
+    }
+    function onRejected(error) {
+        console.log(error);     // => "throw Error @ Task A"
+    }
+    function finalTask() {
+        console.log("Final Task");
+    }
+
+    var promise = Promise.resolve();
+    promise
+        .then(taskA)
+        .then(taskB)
+        .catch(onRejected)
+        .then(finalTask);
+
+```
+
+### 4 每次调用then都会返回一个新创建的promise对象
+    
+    从代码上乍一看， aPromise.then(...).catch(...) 像是针对最初的 aPromise 对象进行了一连串的方法链调用。
+    然而实际上不管是 then 还是 catch 方法调用，都返回了一个新的promise对象。
+
+```js
+
+    var aPromise = new Promise(function (resolve) {
+        resolve(100);
+    });
+    var thenPromise = aPromise.then(function (value) {
+        console.log(value);
+    });
+    var catchPromise = thenPromise.catch(function (error) {
+        console.error(error);
+    });
+
+    console.log(aPromise !== thenPromise);          // => true
+    console.log(thenPromise !== catchPromise);      // => true
+
+```
+    如果我们知道了 then 方法每次都会创建并返回一个新的promise对象的话，那么我们就应该不难理解下面代码中对 then 的使用方式上的差别了。
+
+```js
+
+    // 1: 对同一个promise对象同时调用 `then` 方法
+    var aPromise = new Promise(function (resolve) {
+        resolve(100);
+    });
+    aPromise.then(function (value) {
+        return value * 2;
+    });
+    aPromise.then(function (value) {
+        return value * 2;
+    });
+    aPromise.then(function (value) {
+        console.log("1: " + value); // => 100
+    })
+
+    // vs
+
+    // 2: 对 `then` 进行 promise chain 方式进行调用
+    var bPromise = new Promise(function (resolve) {
+        resolve(100);
+    });
+    bPromise.then(function (value) {
+        return value * 2;
+    }).then(function (value) {
+        return value * 2;
+    }).then(function (value) {
+        console.log("2: " + value); // => 100 * 2 * 2
+    });
+
+```
+   
+    第1种写法中并没有使用promise的方法链方式，这在Promise中是应该极力避免的写法。这种写法中的 then 调用几乎是在同时开始执行的，而且传给每个 then 方法的 value 值都是 100 。
+
+    第2中写法则采用了方法链的方式将多个 then 方法调用串连在了一起，各函数也会严格按照 resolve → then → then → then 的顺序执行，并且传给每个 then 方法的 value 的值都是前一个promise对象通过 return 返回的值。
+
+
+### 5  then or catch?
+
+#### 5.1 不能进行错误处理的onRejected    
+
+```js
+
+    function throwError(value) {
+        // 抛出异常
+        throw new Error(value);
+    }
+    // <1> onRejected不会被调用
+    function badMain(onRejected) {
+        return Promise.resolve(42).then(throwError, onRejected);
+    }
+    // <2> 有异常发生时onRejected会被调用
+    function goodMain(onRejected) {
+        return Promise.resolve(42).then(throwError).catch(onRejected);
+    }
+    // 运行示例
+    badMain(function(){
+        console.log("BAD");
+    });
+    goodMain(function(){
+        console.log("GOOD");
+    });
+
+    // 输出
+        GOOD
+        (node:3484) UnhandledPromiseRejectionWarning: Unhandled promise rejection (rejection id: 1): Error: 42
+
+```
+    
+    在上面的代码中， badMain 是一个不太好的实现方式（但也不是说它有多坏）,goodMain 则是一个能非常好的进行错误处理的版本。
+    
+    为什么说 badMain 不好呢？，因为虽然我们在 .then 的第二个参数中指定了用来错误处理的函数，
+    但实际上它却不能捕获第一个参数 onFulfilled 指定的函数（本例为 throwError ）里面出现的错误。
+    
+    也就是说，这时候即使 throwError 抛出了异常，onRejected 指定的函数也不会被调用（即不会输出"BAD"字样）。
+    与此相对的是， goodMain 的代码则遵循了 throwError→onRejected 的调用流程。 这时候 throwError 中出现异常的话，在会被方法链中的下一个方法，即 .catch 所捕获，进行相应的错误处理。
+
+    then 方法中的onRejected参数所指定的回调函数，实际上针对的是其promise对象或者之前的promise对象，而不是针对 .then 方法里面指定的第一个参数，即onFulfilled所指向的对象，这也是 then 和 catch 表现不同的原因。
+
+    说白了，就是因为，catch 还能捕获 then 第一个函数【onFulfilled】中的异常。
+    
 
 ## 参考
     http://liubin.org/promises-book/#chapter2-how-to-write-promise
     http://es6.ruanyifeng.com/#docs/promise#Promise-的含义
+    http://liubin.org/promises-book/
 

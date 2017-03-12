@@ -390,10 +390,9 @@ process对象提供以下方法：
 根据Node的事件循环的实现，基本上，【进入下一轮事件循环之后】的执行顺序如下，
 记得是下次事件循环之后，也就是当此事件循环已经终止了。
 
-1、 `setTimeout(f,0)`
-2、各种到期的回调函数
-3、 `process.nextTick`
-    push(), sort(), reverse(), and splice() 
+1.`setTimeout(f,0)`
+2.各种到期的回调函数
+3.`process.nextTick` push(), sort(), reverse(), and splice() 
 
 ### 我们至少记住 2条粗浅的结论，有助于提升你的执行效率：
 #### 1  如果可能的话，调用setTimeout时，尽量使用相同的超时值时间，
