@@ -729,6 +729,23 @@ console.log("outer promise");       // 2
 
     主要的问题是，执行时机是不确定的，会根据当时的情况而定，因此，就都写成异步即可。
 
+```js
+
+    function Test () {
+        var promise = new Promise(function(resolve, reject) {
+
+            // 业务 实现
+            
+            resolve("....");
+            reject("...");
+        });
+
+        return promise;
+    }
+
+    // 这样写，流程就可控了。
+
+```
 
 ### 3 promise chain 【promise的链式操作】
 
@@ -817,9 +834,7 @@ console.log("outer promise");       // 2
     第2中写法则采用了方法链的方式将多个 then 方法调用串连在了一起，各函数也会严格按照 resolve → then → then → then 的顺序执行，并且传给每个 then 方法的 value 的值都是前一个promise对象通过 return 返回的值。
 
 
-### 5  then or catch?
-
-#### 5.1 不能进行错误处理的onRejected    
+### 5  then or catch? 
 
 ```js
 
@@ -859,8 +874,8 @@ console.log("outer promise");       // 2
 
     then 方法中的onRejected参数所指定的回调函数，实际上针对的是其promise对象或者之前的promise对象，而不是针对 .then 方法里面指定的第一个参数，即onFulfilled所指向的对象，这也是 then 和 catch 表现不同的原因。
 
-    说白了，就是因为，catch 还能捕获 then 第一个函数【onFulfilled】中的异常。
-    
+    说白了，就是因为，catch 还能捕获 then 中 函数【onFulfilled】和【onRejected】中的异常。
+
 
 ## 参考
     http://liubin.org/promises-book/#chapter2-how-to-write-promise
