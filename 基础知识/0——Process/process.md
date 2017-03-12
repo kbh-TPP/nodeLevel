@@ -96,8 +96,7 @@ stdout属性指向标准输出（文件描述符1）。它的write方法等同�
 ```javascript
 
 console.log = function(d) {
-  process.stdout.write(d + '\n');
-  
+    process.stdout.write(d + '\n');
 };
 
 ```
@@ -114,9 +113,10 @@ fs.createReadStream('wow.txt')
           会把文件读入到内存,并显示到控制台中
 
 ```
-
-        上面代码中，由于 process.stdout 和 process.stdin 与其他进程的通信，都是流（stream）形式，
-    所以必须通过pipe管道命令中介。
+        上面代码中，由于 process.stdout 和 process.stdin 的通信，都是流（stream）形式，
+    所以必须通过pipe管道命令中介。尝试解释理解一下pipe，所谓中介,就可以理解为将读取的txt文件，
+    暂时存储一下，作为 proess.stdout 的输入参数。
+        pipe 使用的时候，其实和内存一样，防止同时读写。
 
 ```javascript
 
@@ -133,13 +133,13 @@ fs.createReadStream('wow.txt')
 
 **（2）stdin**
 
-stdin代表标准输入（文件描述符0）。
+    stdin代表标准输入（文件描述符0）。
 
 ```javascript
 process.stdin.pipe(process.stdout)
 ```
 
-上面代码表示将标准输入导向标准输出。
+        上面代码表示将标准输入导向标准输出。
 
 由于stdin和stdout都部署了stream接口，所以可以使用stream接口的方法。
 
@@ -225,13 +225,12 @@ execPath属性返回执行当前脚本的Node二进制文件的绝对路径。
     >
 ```
 
-###
-    process对象提供以下方法：
-    
-        process.exit()：退出当前进程。
-        process.cwd()：返回运行当前脚本的工作目录的路径。_
-        process.chdir()：改变工作目录。
-        process.nextTick()：将一个回调函数放在下次事件循环的顶部。效率更高，更准确。
+###process对象提供以下方法：
+
+    process.exit()：退出当前进程。
+    process.cwd()：返回运行当前脚本的工作目录的路径。_
+    process.chdir()：改变工作目录。
+    process.nextTick()：将一个回调函数放在下次事件循环的顶部。效率更高，更准确。
 
 ```js
 
@@ -279,10 +278,11 @@ process对象提供以下方法：
 - **process.exit()**：退出当前进程。
 - **process.getgid()**：返回当前进程的组ID（数值）。
 - **process.getuid()**：返回当前进程的用户ID（数值）。
-- **process.nextTick()**：指定回调函数在当前执行栈的尾部、下一次Event Loop之前执行。
-- **process.on()**：监听事件。
 - **process.setgid()**：指定当前进程的组，可以使用数字ID，也可以使用字符串ID。
 - **process.setuid()**：指定当前进程的用户，可以使用数字ID，也可以使用字符串ID。
+- **process.nextTick()**：指定回调函数在当前执行栈的尾部、下一次Event Loop之前执行。
+- **process.on()**：监听事件。
+
 
 ### process.cwd()，process.chdir()
 
@@ -297,7 +297,7 @@ process对象提供以下方法：
     '/home/bbb'
 ```
 
-注意，`process.cwd()`与`__dirname`的区别。前者进程发起时的位置，后者是脚本的位置，两者可能是不一致的。
+注意，`process.cwd()`与`__dirname`的区别。【前者进程发起时的位置】，【后者是脚本的位置】，两者可能是不一致的。
 比如，`node ./code/program.js`，对于`process.cwd()`来说，返回的是当前目录（`.`）；
 对于`__dirname`来说，返回是脚本所在目录，即`./code/program.js`。
 
@@ -325,14 +325,23 @@ process对象提供以下方法：
     setTimeout(function () {
         console.log("---- [ setTimeout 0] ----");
         process.nextTick(function () {
-            console.log(' ---[ nextTick 0]--- ')
+            console.log('---[ nextTick 0]--- ')
         });
     
     }, 1000);
     
     setTimeout(function () {
+        console.log('---[ setTimeout action]--- ')
+    }, 0);
+    
+
+    process.nextTick(function() {
+        console.log('---[ nextTick action]--- ')
+    });
+
+    setTimeout(function () {
         process.nextTick(function () {
-            console.log(' ---[ nextTick A]--- ')
+            console.log('---[ nextTick A]--- ')
         });
     
         setTimeout(function () {
@@ -344,7 +353,7 @@ process对象提供以下方法：
         }, 0);
     
         process.nextTick(function () {
-            console.log(' ---[ nextTick B]--- ')
+            console.log('---[ nextTick B]--- ')
         });
     
     }, 1000);
@@ -362,30 +371,32 @@ process对象提供以下方法：
 ```
     输出
         node process.js
-        ---- [ setTimeout 0] ----
-        ---- [ setTimeout 1] ----
-         ---[ nextTick 0]--- 
-         ---[ nextTick A]--- 
-         ---[ nextTick B]--- 
-         ---[ nextTick 1]--- 
-        ---- [ setTimeout A] ----
-        ---- [ setTimeout B] ----
+            ---[ nextTick action]--- 
+            ---[ setTimeout action]--- 
+            ---- [ setTimeout 0] ----
+            ---- [ setTimeout 1] ----
+            ---[ nextTick 0]--- 
+            ---[ nextTick A]--- 
+            ---[ nextTick B]--- 
+            ---[ nextTick 1]--- 
+            ---- [ setTimeout A] ----
+            ---- [ setTimeout B] ----
 
 
 
+    `setTimeout(f,0)`是将任务放到下一轮事件循环的头部，因此`nextTick`会比它先执行。另外，
+    `nextTick`的效率更高，因为不用检查是否到了指定时间。只要此时事件循环结束就可以执行了。
 
-`setTimeout(f,0)`是将任务放到下一轮事件循环的头部，因此`nextTick`会比它先执行。另外，
-`nextTick`的效率更高，因为不用检查是否到了指定时间。
+根据Node的事件循环的实现，基本上，【进入下一轮事件循环之后】的执行顺序如下，
+记得是下次事件循环之后，也就是当此事件循环已经终止了。
 
-根据Node的事件循环的实现，基本上，进入下一轮事件循环后的执行顺序如下。
+1、 `setTimeout(f,0)`
+2、各种到期的回调函数
+3、 `process.nextTick`
+    push(), sort(), reverse(), and splice() 
 
-1. `setTimeout(f,0)`
-1. 各种到期的回调函数
-1. `process.nextTick`
-push(), sort(), reverse(), and splice() 
-
-### 我们至少记住 2条粗浅的结论：
-#### 1  如果可能的话，调用setTimeout时，尽量使用相同的超时值
+### 我们至少记住 2条粗浅的结论，有助于提升你的执行效率：
+#### 1  如果可能的话，调用setTimeout时，尽量使用相同的超时值时间，
 #### 2  尽量用 process.nextTick 来代替 setTimeout(fn ,0)
 
 ### process.exit()
@@ -393,11 +404,11 @@ push(), sort(), reverse(), and splice()
 `process.exit`方法用来退出当前进程。它可以接受一个数值参数，如果参数大于0，表示执行失败；如果等于0表示执行成功。
 
 ```bash
-if (err) {
-  process.exit(1);
-} else {
-  process.exit(0);
-}
+    if (err) {
+      process.exit(1);
+    } else {
+      process.exit(0);
+    }
 ```
 
 `process.exit()`执行时，会触发`exit`事件。
@@ -410,14 +421,16 @@ if (err) {
 
     process.on('uncaughtException', function(err){
       console.error('got an error: %s', err.message);
-      process.exit(1);
+      
+      //  process.exit(1);  // 退出，
+      //  无须退出，报警即可
     });
     
     setTimeout(function(){
       throw new Error('fail');
     }, 100);
         
-        【 这个好酷，要注意研究一下 】
+      //  这个可以平时使用一下，防止进程挂掉，可以写一些容错,处理
         
 ```
 
@@ -434,8 +447,8 @@ if (err) {
         
     // 例子（1）
     process.on('SIGINT', function() {
-        console.log('收到 SIGINT 信号, 退出。');
-        process.exit(0);
+        console.log('收到 SIGINT 信号, 退出，我就不是不退出。');
+        // process.exit(0);
     });
     
     console.log('打印进程ID', process.pid);
@@ -491,7 +504,7 @@ if (err) {
     // 会显示，关闭服务。之后，退出
     
     // 不要使用浏览器。因为，浏览器会保持长链接，就无法退出。
-    // 长链接时间，15s--> 100s,不等。
+    // 长链接断开时间为，15s--> 100s,不等。
 ```
 
 上面代码表示，进程接到`SIGTERM`信号之后，关闭服务器，然后退出进程。
@@ -512,8 +525,28 @@ process.on('exit', function() {
 ```javascript
 process.kill(process.pid, 'SIGTERM');
 ```
-
 上面代码用于杀死当前进程。
+
+```js
+
+    process.kill(1339)
+    // true
+    process.kill(1339)
+    // Error: kill ESRCH
+    //    at exports._errnoException (util.js:1022:11)
+    //    at process.kill (internal/process.js:172:13)
+    //    at repl:1:9
+    //    at sigintHandlersWrap (vm.js:22:35)
+    //    at sigintHandlersWrap (vm.js:96:12)
+    //    at ContextifyScript.Script.runInThisContext (vm.js:21:12)
+    //    at REPLServer.defaultEval (repl.js:340:29)
+    //    at bound (domain.js:280:14)
+    //    at REPLServer.runBound [as eval] (domain.js:293:12)
+    //    at REPLServer.<anonymous> (repl.js:538:10)
+```
+    
+    这里，展示了 在 开启node 命令行内，可以用个当前的node 服务，去关闭掉其他node服务。
+
 
 ```javascript
     process.on('SIGTERM', function(){
@@ -574,7 +607,8 @@ Node进程会自动退出，设置beforeExit事件的监听函数以后，就可
 
 beforeExit事件与exit事件的主要区别是，beforeExit的监听函数可以部署异步任务，而exit不行。
 
-此外，如果是显式终止程序（比如调用process.exit()），或者因为发生未捕获的错误，而导致进程退出，这些场合不会触发beforeExit事件。因此，不能使用该事件替代exit事件。
+此外，如果是显式终止程序（比如调用process.exit()），或者因为发生未捕获的错误，而导致进程退出，这些场合不会触发beforeExit事件。
+因此，不能使用该事件替代exit事件。
 
 ### uncaughtException事件
 
@@ -588,8 +622,8 @@ process.on('uncaughtException', function (err) {
 });
 ```
 
-部署`uncaughtException`事件的监听函数，是免于Node进程终止的最后措施，否则Node就要执行`process.exit()`。出于除错的目的，并不建议发生错误后，还保持进程运行。
-
+部署`uncaughtException`事件的监听函数，是免于Node进程终止的最后措施，否则Node就要执行`process.exit()`。
+【 出于除错的目的，并不建议发生错误后，还保持进程运行】
 抛出错误之前部署的异步操作，还是会继续执行。只有完成以后，Node进程才会退出。
 
 ```javascript

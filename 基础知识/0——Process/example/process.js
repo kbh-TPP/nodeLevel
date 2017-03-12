@@ -97,6 +97,7 @@
 //
 // }, 999);
 
+// console.log(process.env.NODE_ENV);
 
 // process.on('uncaughtException', function (err) {
 //     console.error('got an error: %s', err.message);
@@ -174,9 +175,52 @@
 // process.on('SIGINT', function() {
 //     console.log('SIGINT信号，按Control-D退出');
 // });
-
-
-
+//
+// setTimeout(function () {
+//     console.log("---- [ setTimeout 0] ----");
+//     process.nextTick(function () {
+//         console.log('---[ nextTick 0]--- ')
+//     });
+//
+// }, 1000);
+//
+// setTimeout(function () {
+//     console.log('---[ setTimeout action]--- ')
+// }, 0);
+//
+//
+// process.nextTick(function() {
+//     console.log('---[ nextTick action]--- ')
+// });
+//
+// setTimeout(function () {
+//     process.nextTick(function () {
+//         console.log('---[ nextTick A]--- ')
+//     });
+//
+//     setTimeout(function () {
+//         console.log("---- [ setTimeout A] ----");
+//     }, 0);
+//
+//     setTimeout(function () {
+//         console.log("---- [ setTimeout B] ----");
+//     }, 0);
+//
+//     process.nextTick(function () {
+//         console.log('---[ nextTick B]--- ')
+//     });
+//
+// }, 1000);
+//
+//
+// setTimeout(function () {
+//     console.log("---- [ setTimeout 1] ----");
+//
+//     process.nextTick(function () {
+//         console.log(' ---[ nextTick 1]--- ')
+//     });
+//
+// }, 1000);
 
 // process.execArgv.forEach(function(val, index, array) {
 //     console.log("execArgv " + index + ': ' + val);

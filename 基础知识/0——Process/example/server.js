@@ -11,7 +11,10 @@ var server = http.createServer(function(req, res){
     });
 
     req.on('end', function(){
+
+        a++;
         console.log( 'post body is: ' + body );
+
         res.end('ok');
     });
 });
@@ -19,7 +22,10 @@ var server = http.createServer(function(req, res){
 server.listen(3000);
 
 
+process.on('uncaughtException', function(err){
+    console.error('got an error: %s', err);
 
+});
 
 
 
