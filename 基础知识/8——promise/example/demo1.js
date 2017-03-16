@@ -2,20 +2,20 @@
 
 
     // 写法一
-    // function Test() {
-    //     var promise = new Promise(function(resolve, reject) {
-    //         try {
-    //             console.log('promise action');
-    //             throw new Error('test');
-    //             resolve("OK");
+    function Test() {
+        var promise = new Promise(function(resolve, reject) {
+            try {
+                console.log('promise action');
+                throw new Error('test');
+                resolve("OK");
 
-    //         } catch (e) {
-    //             reject(e);
-    //         }
-    //     });
+            } catch (e) {
+                reject(e);
+            }
+        });
 
-    //     return promise;
-    // }
+        return promise;
+    }
 
     // Test().catch(function(error) {
     //     console.log(error);
@@ -45,20 +45,30 @@
 
 // console.log("outer promise");       // 2
 
+console.log('console 1');
 
-// Promise.resolve(42).then(function(data) {
-//     console.log(data);
-// })
+process.nextTick(function() {
+    console.log('nextTick 1');
+});
 
-// setTimeout(function() {
-//     console.log('setTimeout');
-// }, 0);
+setTimeout(function() {
+    console.log('setTimeout1');
+}, 0);
 
-// process.nextTick(function() {
-//     console.log('nextTick');
-// });
+Promise.resolve(42).then(function(data) {
+    console.log(data);
+})
 
-// console.log('console');
+setTimeout(function() {
+    console.log('setTimeout2');
+}, 0);
+
+process.nextTick(function() {
+    console.log('nextTick 2');
+});
+
+
+console.log('console 2');
 
 // function Test() {
 //     var promise = new Promise(function(resolve, reject) {
@@ -141,22 +151,24 @@
 // });
 
 
-function throwError(value) {
-    // 抛出异常
-    throw new Error(value);
-}
-// <1> onRejected不会被调用
-function badMain(onRejected) {
-    return Promise.resolve(42).then(throwError, onRejected);
-}
-// <2> 有异常发生时onRejected会被调用
-function goodMain(onRejected) {
-    return Promise.resolve(42).then(throwError).catch(onRejected);
-}
-// 运行示例
-badMain(function(){
-    console.log("BAD");
-});
-goodMain(function(){
-    console.log("GOOD");
-});
+// function throwError(value) {
+//     // 抛出异常
+//     throw new Error(value);
+// }
+// // <1> onRejected不会被调用
+// function badMain(onRejected) {
+//     return Promise.resolve(42).then(throwError, onRejected);
+// }
+// // <2> 有异常发生时onRejected会被调用
+// function goodMain(onRejected) {
+//     return Promise.resolve(42).then(throwError).catch(onRejected);
+// }
+// // 运行示例
+// badMain(function(){
+//     console.log("BAD");
+// });
+// goodMain(function(){
+//     console.log("GOOD");
+// });
+
+

@@ -771,8 +771,10 @@ console.log("outer promise");       // 2
         .then(taskB)
         .catch(onRejected)
         .then(finalTask);
-
 ```
+    
+    
+
 
 ### 4 每次调用then都会返回一个新创建的promise对象
     
