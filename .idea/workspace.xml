@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="de57d501-ac16-42e6-b5b2-d5de7315c8b8" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/基础知识/.idea/workspace.xml" afterPath="$PROJECT_DIR$/基础知识/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/基础知识/10——fs/fs.md" afterPath="$PROJECT_DIR$/基础知识/10——fs/fs.md" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -28,7 +30,7 @@
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
               <first_editor relative-caret-position="598">
-                <caret line="26" column="5" lean-forward="true" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
+                <caret line="26" column="5" lean-forward="false" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
                 <folding>
                   <marker date="1489648400000" expanded="true" signature="486:585" ph="{...}" />
                   <marker date="1489648400000" expanded="true" signature="546:579" ph="{...}" />
@@ -72,8 +74,8 @@
         <entry file="file://$PROJECT_DIR$/基础知识/10——fs/fs.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="FIRST">
-              <first_editor relative-caret-position="92">
-                <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+              <first_editor relative-caret-position="78">
+                <caret line="151" column="14" lean-forward="false" selection-start-line="151" selection-start-column="14" selection-end-line="151" selection-end-column="14" />
                 <folding />
               </first_editor>
               <second_editor />
@@ -105,12 +107,13 @@
     <handled-path value="$PROJECT_DIR$/基础知识/4——HTTPS/HTTPS/forge/node_modules" />
     <handled-path value="$PROJECT_DIR$/基础知识/4——HTTPS/demoHttps/node_modules" />
     <handled-path value="$PROJECT_DIR$/基础知识/7——stream/node_modules" />
+    <handled-path value="$PROJECT_DIR$/基础知识/model/commander/node_modules" />
     <handled-path value="$PROJECT_DIR$/基础知识/框架/express/example/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="160" />
-    <option name="y" value="22" />
-    <option name="width" value="1453" />
+    <option name="x" value="1913" />
+    <option name="y" value="95" />
+    <option name="width" value="1676" />
     <option name="height" value="1028" />
   </component>
   <component name="ProjectView">
@@ -128,6 +131,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -164,8 +169,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -192,17 +195,19 @@
       <updated>1489637588197</updated>
       <workItem from="1489637589803" duration="136000" />
       <workItem from="1489977126644" duration="559000" />
+      <workItem from="1490602708050" duration="24000" />
+      <workItem from="1490608367768" duration="84000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="695000" />
+    <option name="totallyTimeSpent" value="803000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="160" y="22" width="1453" height="1028" extended-state="0" />
+    <frame x="1913" y="95" width="1676" height="1028" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16201118" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18489426" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -231,10 +236,46 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/基础知识/9——Cluster/cluster.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+    <entry file="file://$PROJECT_DIR$/基础知识/9——Cluster/Cluster.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding>
+              <marker date="1489648400000" expanded="true" signature="486:585" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="546:579" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="591:621" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="705:889" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="782:868" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="1115:1840" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="1297:1336" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="1426:1566" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="1628:1831" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="1846:1876" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="2693:2933" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="2842:2924" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="2961:3098" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="3007:3090" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="3104:3186" ph="//..." />
+              <marker date="1489648400000" expanded="true" signature="3459:3561" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="3501:3555" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="3594:3657" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="3773:3822" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="4598:4698" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5027:5115" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5069:5109" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5188:5665" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5260:5304" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5346:5657" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5386:5466" ph="{&quot;text&quot;: 'shutdown'...}" />
+              <marker date="1489648400000" expanded="true" signature="5504:5639" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5548:5625" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5904:6250" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="6033:6242" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="6109:6232" ph="{...}" />
+            </folding>
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
@@ -286,6 +327,67 @@
         <state split_layout="FIRST">
           <first_editor relative-caret-position="92">
             <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/基础知识/9——Cluster/cluster.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/基础知识/9——Cluster/Cluster.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="598">
+            <caret line="26" column="5" lean-forward="false" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
+            <folding>
+              <marker date="1489648400000" expanded="true" signature="486:585" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="546:579" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="591:621" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="705:889" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="782:868" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="1115:1840" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="1297:1336" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="1426:1566" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="1628:1831" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="1846:1876" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="2693:2933" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="2842:2924" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="2961:3098" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="3007:3090" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="3104:3186" ph="//..." />
+              <marker date="1489648400000" expanded="true" signature="3459:3561" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="3501:3555" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="3594:3657" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="3773:3822" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="4598:4698" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5027:5115" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5069:5109" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5188:5665" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5260:5304" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5346:5657" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5386:5466" ph="{&quot;text&quot;: 'shutdown'...}" />
+              <marker date="1489648400000" expanded="true" signature="5504:5639" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5548:5625" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="5904:6250" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="6033:6242" ph="{...}" />
+              <marker date="1489648400000" expanded="true" signature="6109:6232" ph="{...}" />
+            </folding>
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/基础知识/10——fs/fs.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="78">
+            <caret line="151" column="14" lean-forward="false" selection-start-line="151" selection-start-column="14" selection-end-line="151" selection-end-column="14" />
             <folding />
           </first_editor>
           <second_editor />
