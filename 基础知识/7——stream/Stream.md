@@ -5,7 +5,106 @@
     在node中，node内置的stream模块已经被多个核心模块使用，同时也可以被用户自定义的模块使用。
     和unix类似，node中的流模块的基本操作符叫做.pipe()，同时你也可以使用一个后压机制来应对那些对数据消耗较慢的对象。
 
-## 为什么应该使用流
+    在 Unix 系统中流就是一个很常见也很重要的概念，从术语上讲流是对输入输出设备的抽象。
+
+## NodeJS 中 Stream 的几种类型
+
+    从程序角度而言流是有方向的数据，按照流动方向可以分为三种流
+
+        设备流向程序：readable
+        程序流向设备：writable
+        双向：duplex、transform
+
+    NodeJS 关于流的操作被封装到了 Stream 模块，这个模块也被多个核心模块所引用。按照 Unix 的哲学：一切皆文件，在 NodeJS 中对文件的处理多数使用流来完成
+
+        普通文件
+        设备文件（stdin、stdout）
+        网络文件（http、net）
+    
+    有一个很容易忽略的知识点：在 NodeJS 中所有的 Stream 都是 EventEmitter 的实例。
+
+
+## 加工一下数据
+    
+    上面提到了 readable 和 writable 的流，我们称之为加工器，其实并不太恰当，因为我们并没有加工什么，只是读取数据，然后存储数据。
+    
+    如果有个需求，把本地一个 package.json 文件中的所有字母都改为小写，并保存到同目录下的 package-lower.json 文件下。
+
+    这时候我们就需要用到双向的流了，假定我们有一个专门处理字符转小写的流 lower，那么代码写出来大概是这样的
+
+```js
+
+const fs = require('fs');
+
+const rs = fs.createReadStream('./package.json');
+const ws = fs.createWriteStream('./package-lower.json');
+
+rs.pipe(lower).pipe(ws);
+
+```
+
+    这时候我们可以看出为什么称 pipe() 连接的流为加工器了，根据上面说的，必须从一个 readable 流 pipe 到 writable 流：
+
+    rs -> lower：lower 在下游，所以 lower 需要是个 writable 流
+    lower -> ws：相对而言，lower 又在上游，所以 lower 需要是个 readable 流
+    
+    有点推理的赶脚呢，能够满足我们需求的 lower 必须是双向的流，具体使用 duplex 还是 transform 后面我们会提到。
+
+
+    当然如果我们还有额外一些处理动作，比如字母还需要转成 ASCII 码，假定有一个流 ascii 那么我们代码可能是
+
+    rs.pipe(lower).pipe(acsii).pipe(ws);
+    
+    同样 ascii 也必须是双向的流。这样处理的逻辑是非常清晰的，那么除了代码清晰，使用流还有什么好处呢？
+
+
+## 为什么应该使用 Stream
+
+
+
+    有个用户需要在线看视频的场景，假定我们通过 HTTP 请求返回给用户电影内容，那么代码可能写成这样
+
+```js
+    const http = require('http');
+    const fs = require('fs');
+
+    http.createServer((req, res) => {
+       fs.readFile(moviePath, (err, data) => {
+          res.end(data);
+       });
+    }).listen(8080);
+``` 
+    这样的代码又两个明显的问题
+
+    电影文件需要读完之后才能返回给客户，等待时间超长
+    电影文件需要一次放入内存中，相似动作多了，内存吃不消
+    用流可以讲电影文件一点点的放入内存中，然后一点点的返回给客户（利用了 HTTP 协议的 Transfer-Encoding: chunked 分段传输特性），用户体验得到优化，同时对内存的开销明显下降
+
+```js
+    const http = require('http');
+    const fs = require('fs');
+
+    http.createServer((req, res) => {
+       fs.createReadStream(moviePath).pipe(res);
+    }).listen(8080);
+```
+
+    除了上述好处，代码优雅了很多，拓展也比较简单。比如需要对视频内容压缩，我们可以引入一个专门做此事的流，这个流不用关心其它部分做了什么，只要是接入管道中就可以了
+
+```js
+    const http = require('http');
+    const fs = require('fs');
+    const oppressor = require(oppressor);
+
+    http.createServer((req, res) => {
+       fs.createReadStream(moviePath)
+          .pipe(oppressor)
+          .pipe(res);
+    }).listen(8080);
+```
+
+    可以看出来，使用流后，我们的代码逻辑变得相对独立，可维护性也会有一定的改善，关于几种流的具体使用方式且听下回分解。
+    
 
     在node中，I/O都是异步的，所以在和硬盘以及网络的交互过程中会涉及到传递回调函数的过程。你之前可能会写出这样的代码：
 
