@@ -308,8 +308,29 @@ buf1.toString()  // '�\tpk�\u0000\u0000P:'
 
      Buffer 类的实例类似于整型数组，不过缓冲区的大小在创建时确定，不能调整。Buffer 对象不同之处在于它不经 V8 的内存分配机制，Buffer 是一个 JavaScript 和 C++ 结合的模块，内存由 C++ 申请，JavaScript 分配。
 
+```js
 
+Buffer.poolSize = 8 * 1024;
+function allocate(size) {
+  if (size <= 0) {
+    return new FastBuffer();
+  }
+  if (size < (Buffer.poolSize >>> 1)) {     // 4K
 
+    if (size > (poolSize - poolOffset))
+      createPool();
+
+    var b = new FastBuffer(allocPool, poolOffset, size);
+    poolOffset += size;
+    alignPool();
+
+    return b;
+  } else {
+    return createUnsafeBuffer(size);
+  }
+}
+
+```
 
 #### 4、Buffer 和 String 转换
 
@@ -326,18 +347,96 @@ buf1.toString()  // '�\tpk�\u0000\u0000P:'
 
 
 
+### 8、buffer 系统方法，很有意思。
+
+
+#### 1、创建
+
+```js
+
+第一种
+var buf = new Buffer(10);
+console.log("buf = ", buf);
+ 
+
+第1次
+$ node app.js 
+buf =  <Buffer 00 00 00 00 00 00 00 00 00 00>
+
+第2次
+$ node app.js
+buf =  <Buffer c6 f6 40 08 04 74 05 e8 20 00>
+
+```
+    
+    果然没有清空，哈哈
+
+```js
+
+第二种
+var buf = new Buffer([10, 20, 30, 40, 50])
+
+第三种
+var buf = new Buffer("www.runoob.com", "utf-8");
+// utf-8 是默认的编码方式，此外它同样支持以下编码："ascii", "utf8", "utf16le", "ucs2", "base64" 和 "hex"
+
+```
+
+
+#### 2、写入缓冲区
+
+```js
+
+buf.write(string[, offset[, length]][, encoding])
+
+```
+
+    参数
+        参数描述如下：
+        string - 写入缓冲区的字符串。
+        offset - 缓冲区开始写入的索引值，默认为 0 。
+        length - 写入的字节数，默认为 buffer.length
+        encoding - 使用的编码。默认为 'utf8' 。
+
+    返回值
+        返回实际写入的大小。如果 buffer 空间不足， 则只会写入部分字符串。
+
+
+```js
+
+    buf = new Buffer(256);
+    len = buf.write("www.runoob.com");
+
+    console.log("写入字节数 : "+  len);
+```
+
+#### 3、从缓冲区读取数据
+    
+    读取 Node 缓冲区数据的语法如下所示：
+        buf.toString([encoding[, start[, end]]])
 
 
 
 
+#### 4、需要注意的——属性和方法
 
+    buf.length
+        返回这个 buffer 的 bytes 数。注意这未必是 buffer 里面内容的大小。length 是 buffer 对象所分配的内存数，它不会随着这个 buffer 对象内容的改变而改变。
 
+    buf.writeUIntLE(value, offset, byteLength[, noAssert])
+        将value 写入到 buffer 里， 它由offset 和 byteLength 决定，支持 48 位计算，例如
 
+```js
+    var b = new Buffer(6);
+    b.writeUIntBE(0x1234567890ab, 0, 6);
+    // <Buffer 12 34 56 78 90 ab>
 
+    noAssert 值为 true 时，不再验证 value 和 offset 的有效性。 默认是 false。
+```
 
+    buf.writeUInt8(value, offset[, noAssert])
 
-
-
+        根据传入的 offset 偏移量将 value 写入 buffer。注意：value 必须是一个合法的有符号 8 位整数。 若参数 noAssert 为 true 将不会验证 offset 偏移量参数。 这意味着 value 可能过大，或者 offset 可能会超出 buffer 的末尾从而造成 value 被丢弃。 除非你对这个参数非常有把握，否则不要使用。默认是 false。
 
 
 #### 引用

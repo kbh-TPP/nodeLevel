@@ -36,27 +36,30 @@
 
 
 
-buf = new Buffer(1234);
-console.log("buf.length = ", buf.length); // 1234
-console.log("buf.byteLength = ", buf.byteLength)	// 0
+// buf = new Buffer(1234);
+// console.log("buf.length = ", buf.length); // 1234
+// console.log("buf.byteLength = ", buf.byteLength)	// 0
 
-for (var pro in buf) {
-	console.log(pro, " = " ,buf[pro]);
-}
+// for (var pro in buf) {
+// 	console.log(pro, " = " ,buf[pro]);
+// }
 
-buf.write("some string", 0, "ascii");
+// buf.write("some string", 0, "ascii");
 
-console.log("buf.length = ", buf.length)	// 1234
-console.log("buf.byteLength = ", buf.byteLength)	// 4
+// console.log("buf.length = ", buf.length)	// 1234
+// console.log("buf.byteLength = ", buf.byteLength)	// 4
 
-
-
-
+Buffer.byteLength(value, 'utf8');
 
 
+// var buf = new Buffer([10, 20, 30, 40, 50]);
+// console.log("buf = ", buf);
 
 
+var buf = new Buffer(40);
+buf.writeUInt8(7777);
 
+console.log("buf = ", buf);
 
 
 

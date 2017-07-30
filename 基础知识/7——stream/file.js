@@ -1,21 +1,67 @@
+// var fs = require('fs');
+// var readStream = fs.createReadStream('./src/TAF.pdf');
+// var writeStream = fs.createWriteStream('dest');
+
+// readStream.on('data', function(chunk) {         // 当有数据流出时，写入数据
+
+//     if (writeStream.write(chunk) === false) {   // 如果没有写完，暂停读取流
+//         readStream.pause();
+//     }
+
+// });
+
+// writeStream.on('drain', function() {    // 写完后，继续读取
+//     readStream.resume();
+// });
+
+// readStream.on('end', function() {       // 当没有数据时，关闭数据流
+//     writeStream.end();
+// });
 
 
+
+
+// 加载File System读写模块  
 var fs = require('fs');
-var readStream = fs.createReadStream('./src/TAF.pdf');
-var writeStream = fs.createWriteStream('dest');
+// 加载编码转换模块  
+// var iconv = require('iconv-lite');
 
-readStream.on('data', function(chunk) {         // 当有数据流出时，写入数据
+// var file = "/usr/local/app/haige/node-v6.10.3-linux-x86/demo/test/src/text.txt";
+var file = "./text.txt";
 
-    if (writeStream.write(chunk) === false) {   // 如果没有写完，暂停读取流
-        readStream.pause();
-    }
 
-});
+while (true) {
+    writeFile(file);
+    readFile(file);
+}
 
-writeStream.on('drain', function() {    // 写完后，继续读取
-    readStream.resume();
-});
 
-readStream.on('end', function() {       // 当没有数据时，关闭数据流
-    writeStream.end();
-});
+function writeFile(file) {
+    // 测试用的中文  
+    var str = "\r\n我是一个人Hello myself!";
+    console.log(arr);
+    // appendFile，如果文件不存在，会自动创建新文件  
+    // 如果用writeFile，那么会删除旧文件，直接写新文件  
+    fs.appendFile(file, arr, function(err) {
+        if (err)
+            console.log("fail " + err);
+        else
+            console.log("写入文件ok");
+    });
+}
+
+function readFile(file) {
+    fs.readFile(file, function(err, data) {
+        if (err)
+            console.log("读取文件fail " + err);
+        else {
+            // 读取成功时  
+            // 输出字节数组  
+            console.log(data);
+            // 把数组转换为gbk中文  
+            // var str = iconv.decode(data, 'gbk');
+            console.log(str);
+        }
+    });
+}
+
